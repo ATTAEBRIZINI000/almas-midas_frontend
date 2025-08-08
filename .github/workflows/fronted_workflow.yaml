@@ -1,0 +1,40 @@
+name:  CI/CD Pipeline for almas & midas Client
+run-name: Running almas & midas Client T2 CI/CD Pipeline
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run:  docker compose up -d
+      working-directory: ./
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Git pull latest code
+        uses: appleboy/ssh-action@master
+        with:
+          host:  ec2-3-14-254-40.us-east-2.compute.amazonaws.com 
+          username: ec2-user
+          key:  ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            set -e
+            if [ ! -d "/home/ec2-user/almas-midas_frontend" ]; then
+              echo "Repo does not exist, cloning..."
+              git clone https://github.com/ATTAEBRIZINI000/almas-midas_frontend.git
+            fi
+            cd /home/ec2-user/almas-midas_frontend
+            git pull origin main
+        
+            docker compose down
+            docker compose up -d --build
+            echo "Deployment completed successfully"
