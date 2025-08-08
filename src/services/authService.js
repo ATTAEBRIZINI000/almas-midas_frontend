@@ -3,7 +3,7 @@
 
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 // Configuration d'axios avec intercepteurs
 const api = axios.create({
@@ -43,37 +43,37 @@ api.interceptors.response.use(
 export const authService = {
   // Connexion
   login: async (email, password) => {
-    const response = await api.post('/api/auth/login', { email, password });
+    const response = await api.post('/auth/login', { email, password });
     return response.data;
   },
 
   // Inscription
   register: async (userData) => {
-    const response = await api.post('/api/auth/register', userData);
+    const response = await api.post('/auth/register', userData);
     return response.data;
   },
 
   // Vérifier le token
   verifyToken: async () => {
-    const response = await api.post('/api/auth/verify-token');
+    const response = await api.post('/auth/verify-token');
     return response.data.data.user;
   },
 
   // Obtenir le profil utilisateur
   getProfile: async () => {
-    const response = await api.get('/api/auth/me');
+    const response = await api.get('/auth/me');
     return response.data.data.user;
   },
 
   // Mettre à jour le profil
   updateProfile: async (profileData) => {
-    const response = await api.put('/api/auth/profile', profileData);
+    const response = await api.put('/auth/profile', profileData);
     return response.data;
   },
 
   // Changer le mot de passe
   changePassword: async (currentPassword, newPassword) => {
-    const response = await api.put('/api/auth/change-password', {
+    const response = await api.put('/auth/change-password', {
       currentPassword,
       newPassword
     });
@@ -82,13 +82,13 @@ export const authService = {
 
   // Mot de passe oublié
   forgotPassword: async (email) => {
-    const response = await api.post('/api/auth/forgot-password', { email });
+    const response = await api.post('/auth/forgot-password', { email });
     return response.data;
   },
 
   // Réinitialiser le mot de passe
   resetPassword: async (token, newPassword) => {
-    const response = await api.post('/api/auth/reset-password', {
+    const response = await api.post('/auth/reset-password', {
       token,
       newPassword
     });
@@ -98,7 +98,7 @@ export const authService = {
   // Déconnexion
   logout: async () => {
     try {
-      await api.post('/api/auth/logout');
+      await api.post('/auth/logout');
     } catch (error) {
       // Ignorer les erreurs de déconnexion
       console.warn('Erreur lors de la déconnexion:', error);

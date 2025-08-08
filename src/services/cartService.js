@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 const CART_STORAGE_KEY = 'almas_dimas_cart';
 
 // Axios instance with base URL
@@ -52,7 +52,7 @@ export const cartService = {
     if (token) {
       // Logged-in user: get cart from backend
       try {
-        const response = await api.get('/api/cart');
+        const response = await api.get('/cart');
         return {
           success: true,
           cart: response.data.cart
@@ -84,7 +84,7 @@ export const cartService = {
     if (token) {
       // Send add to backend cart
       try {
-        const response = await api.post('/api/cart/add-item', {
+        const response = await api.post('/cart/add-item', {
           productId: product.id,
           quantity,
           options
@@ -163,7 +163,7 @@ export const cartService = {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const response = await api.put('/api/cart/update-item', { itemId, quantity });
+        const response = await api.put('/cart/update-item', { itemId, quantity });
         return {
           success: true,
           cart: response.data.cart
@@ -198,7 +198,7 @@ export const cartService = {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const response = await api.delete(`/api/cart/remove-item/${itemId}`);
+        const response = await api.delete(`/cart/remove-item/${itemId}`);
         return {
           success: true,
           cart: response.data.cart,
@@ -228,7 +228,7 @@ export const cartService = {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const response = await api.post('/api/cart/clear');
+        const response = await api.post('/cart/clear');
         return {
           success: true,
           cart: response.data.cart,
