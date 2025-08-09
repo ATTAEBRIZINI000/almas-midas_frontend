@@ -22,7 +22,7 @@ jobs:
       - name: Git pull latest code
         uses: appleboy/ssh-action@master
         with:
-          host:  ec2-3-14-254-40.us-east-2.compute.amazonaws.com  
+          host: 3.133.127.149 
           username: ec2-user
           key:  ${{ secrets.EC2_SSH_KEY }}
           port: 22
